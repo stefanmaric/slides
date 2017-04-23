@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="es">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>MongoDB - Una breve introducción</title>
+
+    <meta name="description" content="Una presentación sobre MongoDB por Stefan A. Maric para la Universidad de Medellín; septiembre 2014">
+    <meta name="author" content="Stefan A. Maric">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/reveal.min.css" integrity="sha256-5z1tvl5q2pgp1SJIkfLhpdE5JfcAAN1FDBQe3YzlUdg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/theme/simple.min.css" integrity="sha256-KrjefhwRHaPG/MS0Uc3D/MSTf0npDSz2RAWnYZyLj5I=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/css/zenburn.min.css" integrity="sha256-RG50KM9jAN3mc0u2xgR6UrcI20cttg4DxfMHZ05zr7I=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,600">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto+Slab:700">
+
+    <link rel="stylesheet" href="main.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/html5shiv.js" integrity="sha256-qX4MUKrEZt4LaxNtAvVxXPv6zQ683eCqoaf3jYUj2cw=" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js" integrity="sha256-+09kLhwACKXFPDvqo4xMMvi4+uXFsRZ2uYGbeN1U8sI=" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/js/reveal.min.js" integrity="sha256-iSS1lZpXv81SOmVH9u7LxPptbmNmVc40zG/1R2cKUbk=" crossorigin="anonymous"></script>
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi )
+        ? '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/print/pdf.min.css'
+        : '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/print/paper.min.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <section data-background="#4e3629">
+            <img data-src="img/mongodb-logo.png" />
+            <h3 style="color:#ecd999">una breve introducción</h3>
+          </section>
+          <section data-background="#ffffff">
+            <h2>Me presento...</h2>
+          </section>
+          <section data-background="#ffffff">
+            <div class="row clearfix">
+              <div class="col-40">
+                <img class="fragment roll-in" data-src="img/sam-logo.png" />
+              </div>
+              <div class="col-60">
+                <h2 class="fragment roll-in" style="margin: .3em 0 0 0;">Stefan Maric</h2>
+                <h4 class="fragment roll-in sans-serif-heading">WEB DEVELOPER</h4>
+                <p class="fragment roll-in" style="margin-bottom:0;margin-top:2em">MongoDB Certified Professional℠</p>
+                <div class="row clearfix fragment roll-in">
+                  <div class="col-50">
+                    <p><small style="font-size:.75em">MongoDB Certified Developer™</small></p>
+                  </div>
+                  <div class="col-50">
+                    <p><small style="font-size:.75em">MongoDB Certified DBA™</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section data-background="#a1c14b">
+            <h2 class="white-text">Algo de historia</h2>
+          </section>
+
+          <section data-background="#a1c14b">
+            <div class="row clearfix fragment roll-in">
+              <div class="col-20"><h3>70'</h3></div>
+              <div class="col-80"><p style="text-align:left;line-height:1.4em">Nacen los RDBMS</p></div>
+            </div>
+            <div class="row clearfix fragment roll-in">
+              <div class="col-20"><h3>80'</h3></div>
+              <div class="col-80"><p style="text-align:left;line-height:1.4em">Se hacen populares y SQL se vuelve estándar</p></div>
+            </div>
+            <div class="row clearfix fragment roll-in">
+              <div class="col-20"><h3>90'</h3></div>
+              <div class="col-80"><p style="text-align:left;line-height:1.4em">Aparece la web y la programación por capas</p></div>
+            </div>
+            <div class="row clearfix fragment roll-in">
+              <div class="col-20"><h3>00'</h3></div>
+              <div class="col-80"><p style="text-align:left;line-height:1.4em">E-Commerce, Social Media, User Content, Stalking...</p></div>
+            </div>
+            <div class="row clearfix fragment">
+              <h3 style="line-height:1.4em">Big Data</h3>
+            </div>
+          </section>
+
+          <section data-background="#efc73b" >
+            <h2 style="margin-top:20%;">Las RDBMS no escalan</h2>
+            <p style="text-align:right;margin-top:2em;"><a href="http://adam.herokuapp.com/past/2009/7/6/sql_databases_dont_scale/">SQL Databases Don't Scale</a></p>
+            <p style="text-align:right"><small>(lectura recomendada)</small></p>
+          </section>
+
+          <section data-background="#efc73b">
+            <div class="row clearfix">
+              <div class="col-80">
+                <h3>Escalamiento Vertical</h3>
+              </div>
+              <div class="col-20">
+                <div class="cube-pile">
+                  <div class="cube fragment slow" style="height:100px; width:100px;position: absolute; top: 0; left: 0;transform: translate(0, 180%)">
+                    <div class="face top"></div>
+                    <div class="face left"></div>
+                    <div class="face right"></div>
+                  </div>
+                  <div class="cube fragment slow" style="height:100px; width:100px;position: absolute; top: 0; left: 0;transform: translate(0, 65%)">
+                    <div class="face top"></div>
+                    <div class="face left"></div>
+                    <div class="face right"></div>
+                  </div>
+                  <div class="cube fragment slow" style="height:100px; width:100px;position: absolute; top: 0; left: 0;transform: translate(0, -55%)">
+                    <div class="face top"></div>
+                    <div class="face left"></div>
+                    <div class="face right"></div>
+                  </div>
+                  <div class="cube fragment slow" style="height:100px; width:100px;position: absolute; top: 0; left: 0;transform: translate(0, -170%)">
+                    <div class="face top"></div>
+                    <div class="face left"></div>
+                    <div class="face right"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section data-background="img/laptops-pile.jpg">
+          </section>
+
+          <section data-background="#efc73b">
+            <h3>Escalamiento Vertical</h3>
+            <p class="fragment" style="color:#e45257;font-size:1.4em;margin-top:2em;">Costoso</p>
+            <p class="fragment" style="color:#e45257;font-size:1.4em">Limitante</p>
+          </section>
+
+          <section data-background="#00b3b4">
+            <h2>MongoDB escala horizontalmente</h2>
+            <div class="row clearfix">
+              <div class="cube-pile clearfix" style="margin-top:1em">
+                <div class="cube fragment slow" style="height:100px; width:100px;position:absolute;left: 0">
+                  <div class="face top"></div>
+                  <div class="face left"></div>
+                  <div class="face right"></div>
+                </div>
+                <div class="cube fragment slow" style="height:100px; width:100px;position:absolute;left: 190px">
+                  <div class="face top"></div>
+                  <div class="face left"></div>
+                  <div class="face right"></div>
+                </div>
+                <div class="cube fragment slow" style="height:100px; width:100px;position:absolute;left: 380px">
+                  <div class="face top"></div>
+                  <div class="face left"></div>
+                  <div class="face right"></div>
+                </div>
+                <div class="cube fragment slow" style="height:100px; width:100px;position:absolute;left: 570px">
+                  <div class="face top"></div>
+                  <div class="face left"></div>
+                  <div class="face right"></div>
+                </div>
+                <div class="cube fragment slow" style="height:100px; width:100px;position:absolute;left: 760px">
+                  <div class="face top"></div>
+                  <div class="face left"></div>
+                  <div class="face right"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <h2 class="fragment clearfix roll-in" style="margin-top:3em">...infinitamente.<sup class="fragment"><small>*</small></sup></h2>
+            </div>
+
+          </section>
+
+
+          <section data-background="#00b3b4">
+            <h4 class="white-text">Gracias a...</h4>
+            <div class="row clearfix" style="margin-top:1em">
+              <div class="col-50">
+                <h3 class="fragment roll-in">Replica sets</h3>
+              </div>
+              <div class="col-50">
+                <h3 class="fragment roll-in">Sharding</h3>
+              </div>
+            </div>
+            <div class="row clearfix" style="margin-top:1em">
+              <div class="col-50">
+                <p class="fragment" style="margin: 0">Alta disponibilidad</p>
+                <p class="fragment" style="margin: 0">Failover</p>
+                <p class="fragment" style="margin: 0">Recuperación de datos</p>
+                <p class="fragment" style="margin: 0">Respaldos en vivo</p>
+              </div>
+              <div class="col-50">
+                <p class="fragment" style="margin: 0">Escalamiento</p>
+                <p class="fragment" style="margin: 0">Particionamiento por rangos</p>
+                <p class="fragment" style="margin: 0">Balanceo de cargas</p>
+              </div>
+            </div>
+            <p class="fragment roll-in light-gray-text" style="margin-top:1em">Y lo hace solo.</p>
+          </section>
+
+
+          <section data-background="#00b3b4">
+            <h2 class="white-text">...y lo hace rápido.</h2>
+            <h2 class="fragment roll-in white-text">¡Muy rápido!</h2>
+          </section>
+
+          <section data-background="#e35259">
+            <h1>SQL se puede poner feo</h1>
+          </section>
+
+          <section data-background="img/tables.jpg">
+          </section>
+
+          <section data-background="#e35259">
+            <pre class="stretch" style="font-size:x-small"><code data-trim>
+select "T1"."C0" AS "Collateral Type", "T1"."C1" AS "Owner Occuppied", "T1"."C2" AS "County Name", "T1"."C3" AS "Region Description", "T1"."C4" AS "City", "T1"."C5" AS "Orig Appraisal Date", "T1"."C6" AS "Curr Appraisal Date", "T1"."C7" AS "Mortgage 1 Bank", "T1"."C8" AS "Mortgage 2 Bank", "T1"."C9" AS "Bank Owned Mortgage 1", "T1"."C10" AS "Bank Owned Mortgage 2", "T1"."C11" AS "Call Report Code", "T1"."C12" AS "Original Note Date", "T1"."C13" AS "Account Key", "T1"."C14" AS "Account Number", "T1"."C15" AS "Credit Risk Code", "T1"."C16" AS "Current FICO Score", "T1"."C17" AS "Original FICO Score", "T0"."C18" AS "Bank Owned Principal Assets", "T0"."C19" AS "Orig Appraisal Amount", "T0"."C20" AS "Curr Appraisal Amount", "T0"."C21" AS "Mortgage Amount 1", "T0"."C22" AS "Mortgage Amount 2", "T1"."C18" AS "Available Balance", "T1"."C19" AS "Past Due Counter 1", "T1"."C20" AS "Past Due Counter 2", "T1"."C21" AS "Past Due Counter 3", "T1"."C22" AS "Past Due Counter 4", "T1"."C23" AS "Past Due Counter 5", "T1"."C24" AS "Past Due Counter 6"
+  from (
+select "CT_Master"."Collateral Type" AS "C0", "CTPROP"."Owner Occuppied" AS "C1", "CTPROP"."County Name" AS "C2", "Org"."Region Description" AS "C3", "CTPROP"."City" AS "C4", "CTPROP"."Orig Appraisal Date" AS "C5", "CTPROP"."Curr Appraisal Date" AS "C6", "CTPROP"."Mortgage 1 Bank" AS "C7", "CTPROP"."Mortgage 2 Bank" AS "C8", "CTPROP"."Bank Owned Mortgage 1" AS "C9", "CTPROP"."Bank Owned Mortgage 2" AS "C10", "LN_Master"."Call Report Code" AS "C11", case  when isdate("LN_Master"."Original Note Date") = 1 then convert(datetime,convert(varchar,"LN_Master"."Original Note Date")) else NULL end  AS "C12", "LN_Master"."Account Key" AS "C13", "LN_Master"."Account Number" AS "C14", "LN_Master"."Credit Risk Code" AS "C15", "SIFINA"."10 Char Spare Code 1" AS "C16", "SIFINA"."10 Char Spare Code 2" AS "C17", sum("LNIMPR"."Book_Balance" - "Participation_Lookups"."Participation Principal Assets") AS "C18", sum("CTPROP"."Orig Appraisal Amount") AS "C19", sum("CTPROP"."Curr Appraisal Amount") AS "C20", sum("CTPROP"."Mortgage Amount 1") AS "C21", sum("CTPROP"."Mortgage Amount 2") AS "C22"
+  from (((((((
+select "ods_LN_Master"."Account Count",  "ods_LN_Master"."Current Loan Status Code", "ods_LN_Master"."Account Key", "ods_LN_Master"."Org SKey", "ods_LN_Master"."Impaired Asset Status", "ods_LN_Master"."Credit Risk Code", "ods_LN_Master"."Call Report Code",  "ods_LN_Master"."Original Note Date", "ods_LN_Master"."Bank Number", "ods_LN_Master"."Account Number", "ods_LN_Master"."Participation Number", "ods_LN_Master"."Customer Number", "ods_LN_Master"."Dealer Number", "ods_LN_Master"."CIF Key", "ods_LN_Master"."Short Name", "ods_LN_Master"."Converted Account Key", "ods_LN_Master"."Branch Number", "ods_LN_Master"."Proc Application Code",  "ods_LN_Master"."Product Code",  "ods_LN_Master"."Account Application Code"
+  from "BANK38"."dbo"."v_ods_LN_Master" "ods_LN_Master"
+  where ods_LN_Master."Participation Number" = 0) "LN_Master" INNER JOIN (
+select "Account Key", "Participation Principal Assets"
+  from "BANK38"."dbo"."v_ods_Fact_AllProds_2008"
+  where "Application Code" = 'LN') "Participation_Lookups" on "LN_Master"."Account Key" = "Participation_Lookups"."Account Key") LEFT OUTER JOIN (
+select "ods_LNIMPR"."Account Key" AS "Account_Key", "ods_LNIMPR"."Book Balance" AS "Book_Balance"
+  from "BANK38"."dbo"."v_ods_LNIMPR" "ods_LNIMPR"
+  where ods_LNIMPR."Participation Number" = 0) "LNIMPR" on "LN_Master"."Account Key" = "LNIMPR"."Account_Key") LEFT OUTER JOIN "BANK38"."dbo"."fi_Core_Org" "Org" on "LN_Master"."Org SKey" = "Org"."Org Key") LEFT OUTER JOIN (
+select *
+  from "BANK38"."dbo"."v_ods_SICOD1" "ods_CODE_Master"
+  where "ods_CODE_Master"."Application" = 'LN' and "ods_CODE_Master"."Code Type" = 'STAT') "Status_Code" on "LN_Master"."Bank Number" = "Status_Code"."Bankid" and "LN_Master"."Current Loan Status Code" = "Status_Code"."User Code") LEFT OUTER JOIN (
+select "V_ODS_SIFINA"."10 Char Spare Code 1", "V_ODS_SIFINA"."10 Char Spare Code 2", "V_ODS_SIFINA"."Account Key"
+  from "BANK38"."dbo"."V_ODS_SIFINA" "V_ODS_SIFINA"
+  where "V_ODS_SIFINA"."APPLICATION" = 'LN') "SIFINA" on "LN_Master"."Account Key" = "SIFINA"."Account Key") LEFT OUTER JOIN ("BANK38"."dbo"."v_ods_CT_Master" "CT_Master" INNER JOIN (
+select "v_ods_CTACTREL"."Account Number", "v_ods_CTACTREL"."Collateral Key"
+  from "BANK38"."dbo"."v_ods_CTACTREL" "v_ods_CTACTREL"
+  where v_ods_CTACTREL."Application" = 'LN') "CTACTREL" on "CT_Master"."Collateral Key" = "CTACTREL"."Collateral Key") on "LN_Master"."Account Number" = "CTACTREL"."Account Number") LEFT OUTER JOIN "BANK38"."dbo"."v_ods_CTPROP" "CTPROP" on "CT_Master"."Collateral Key" = "CTPROP"."Collateral Key"
+  where case  when ("LN_Master"."Impaired Asset Status" = 'C') then 'H' else "Status_Code"."Code Key 2" end  &lt;&gt; 'C' and "LN_Master"."Proc Application Code" in ('RE', 'IL', 'CL') and case  when ("LN_Master"."Impaired Asset Status" = 'C') then 'H' else "Status_Code"."Code Key 2" end  &lt;&gt; 'H' and "CT_Master"."Collateral Type" in ('430', '431') and "CTPROP"."Owner Occuppied" in ('O')
+  group by "CT_Master"."Collateral Type", "CTPROP"."Owner Occuppied", "CTPROP"."County Name", "Org"."Region Description", "CTPROP"."City", "CTPROP"."Orig Appraisal Date", "CTPROP"."Curr Appraisal Date", "CTPROP"."Mortgage 1 Bank", "CTPROP"."Mortgage 2 Bank", "CTPROP"."Bank Owned Mortgage 1", "CTPROP"."Bank Owned Mortgage 2", "LN_Master"."Call Report Code", case  when isdate("LN_Master"."Original Note Date") = 1 then convert(datetime,convert(varchar,"LN_Master"."Original Note Date")) else NULL end , "LN_Master"."Account Key", "LN_Master"."Account Number", "LN_Master"."Credit Risk Code", "SIFINA"."10 Char Spare Code 1", "SIFINA"."10 Char Spare Code 2") "T0", (
+select "CT_Master"."Collateral Type" AS "C0", "CTPROP"."Owner Occuppied" AS "C1", "CTPROP"."County Name" AS "C2", "Org"."Region Description" AS "C3", "CTPROP"."City" AS "C4", "CTPROP"."Orig Appraisal Date" AS "C5", "CTPROP"."Curr Appraisal Date" AS "C6", "CTPROP"."Mortgage 1 Bank" AS "C7", "CTPROP"."Mortgage 2 Bank" AS "C8", "CTPROP"."Bank Owned Mortgage 1" AS "C9", "CTPROP"."Bank Owned Mortgage 2" AS "C10", "LN_Master"."Call Report Code" AS "C11", case  when isdate("LN_Master"."Original Note Date") = 1 then convert(datetime,convert(varchar,"LN_Master"."Original Note Date")) else NULL end  AS "C12", "LN_Master"."Account Key" AS "C13", "LN_Master"."Account Number" AS "C14", "LN_Master"."Credit Risk Code" AS "C15", "SIFINA"."10 Char Spare Code 1" AS "C16", "SIFINA"."10 Char Spare Code 2" AS "C17", "LN_Master"."Available Balance" AS "C18", "LN_Master"."Past Due Counter 1" AS "C19", "LN_Master"."Past Due Counter 2" AS "C20", "LN_Master"."Past Due Counter 3" AS "C21", "LN_Master"."Past Due Counter 4" AS "C22", "LN_Master"."Past Due Counter 5" AS "C23", "LN_Master"."Past Due Counter 6" AS "C24"
+  from (((((((
+select "ods_LN_Master"."Account Count", "ods_LN_Master"."Current Loan Status Code", "ods_LN_Master"."Credit Risk Code", "ods_LN_Master"."Call Report Code",  "ods_LN_Master"."Impaired Asset Status", "ods_LN_Master"."Past Due Counter 4", "ods_LN_Master"."Past Due Counter 5", "ods_LN_Master"."Past Due Counter 6", "ods_LN_Master"."Past Due Counter 1", "ods_LN_Master"."Past Due Counter 2", "ods_LN_Master"."Past Due Counter 3", "ods_LN_Master"."Available Balance",  "ods_LN_Master"."Original Note Date", "ods_LN_Master"."Org SKey", "ods_LN_Master"."Account Key", "ods_LN_Master"."Ext Application Code", "ods_LN_Master"."Bank Number", "ods_LN_Master"."Account Number", "ods_LN_Master"."Participation Number", "ods_LN_Master"."CIF Key",  "ods_LN_Master"."Proc Application Code", "ods_LN_Master"."Product Code"
+  from "BANK38"."dbo"."v_ods_LN_Master" "ods_LN_Master"
+  where ods_LN_Master."Participation Number" = 0) "LN_Master" INNER JOIN (
+select "Account Key", "Participation Principal Assets"
+  from "BANK38"."dbo"."v_ods_Fact_AllProds_2008"
+  where "Application Code" = 'LN') "Participation_Lookups" on "LN_Master"."Account Key" = "Participation_Lookups"."Account Key") LEFT OUTER JOIN (
+select "ods_LNIMPR"."Account Key" AS "Account_Key", "ods_LNIMPR"."Book Balance" AS "Book_Balance"
+  from "BANK38"."dbo"."v_ods_LNIMPR" "ods_LNIMPR"
+  where ods_LNIMPR."Participation Number" = 0) "LNIMPR" on "LN_Master"."Account Key" = "LNIMPR"."Account_Key") LEFT OUTER JOIN "BANK38"."dbo"."fi_Core_Org" "Org" on "LN_Master"."Org SKey" = "Org"."Org Key") LEFT OUTER JOIN (
+select *
+  from "BANK38"."dbo"."v_ods_SICOD1" "ods_CODE_Master"
+  where "ods_CODE_Master"."Application" = 'LN' and "ods_CODE_Master"."Code Type" = 'STAT') "Status_Code" on "LN_Master"."Bank Number" = "Status_Code"."Bankid" and "LN_Master"."Current Loan Status Code" = "Status_Code"."User Code") LEFT OUTER JOIN (
+select "V_ODS_SIFINA"."10 Char Spare Code 1", "V_ODS_SIFINA"."10 Char Spare Code 2", "V_ODS_SIFINA"."Account Key"
+  from "BANK38"."dbo"."V_ODS_SIFINA" "V_ODS_SIFINA"
+  where "V_ODS_SIFINA"."APPLICATION" = 'LN') "SIFINA" on "LN_Master"."Account Key" = "SIFINA"."Account Key") LEFT OUTER JOIN ("BANK38"."dbo"."v_ods_CT_Master" "CT_Master" INNER JOIN (
+select "v_ods_CTACTREL"."Account Number", "v_ods_CTACTREL"."Collateral Key"
+  from "BANK38"."dbo"."v_ods_CTACTREL" "v_ods_CTACTREL"
+  where v_ods_CTACTREL."Application" = 'LN') "CTACTREL" on "CT_Master"."Collateral Key" = "CTACTREL"."Collateral Key") on "LN_Master"."Account Number" = "CTACTREL"."Account Number") LEFT OUTER JOIN "BANK38"."dbo"."v_ods_CTPROP" "CTPROP" on "CT_Master"."Collateral Key" = "CTPROP"."Collateral Key"
+  where case  when ("LN_Master"."Impaired Asset Status" = 'C') then 'H' else "Status_Code"."Code Key 2" end  &lt;&gt; 'C' and "LN_Master"."Proc Application Code" in ('RE', 'IL', 'CL') and case  when ("LN_Master"."Impaired Asset Status" = 'C') then 'H' else "Status_Code"."Code Key 2" end  &lt;&gt; 'H' and "CT_Master"."Collateral Type" in ('430', '431') and "CTPROP"."Owner Occuppied" in ('O')) "T1"
+  where ("T1"."C0" = "T0"."C0" or "T1"."C0" is null and "T0"."C0" is null) and ("T1"."C1" = "T0"."C1" or "T1"."C1" is null and "T0"."C1" is null) and ("T1"."C2" = "T0"."C2" or "T1"."C2" is null and "T0"."C2" is null) and ("T1"."C3" = "T0"."C3" or "T1"."C3" is null and "T0"."C3" is null) and ("T1"."C4" = "T0"."C4" or "T1"."C4" is null and "T0"."C4" is null) and ("T1"."C5" = "T0"."C5" or "T1"."C5" is null and "T0"."C5" is null) and ("T1"."C6" = "T0"."C6" or "T1"."C6" is null and "T0"."C6" is null) and ("T1"."C7" = "T0"."C7" or "T1"."C7" is null and "T0"."C7" is null) and ("T1"."C8" = "T0"."C8" or "T1"."C8" is null and "T0"."C8" is null) and ("T1"."C9" = "T0"."C9" or "T1"."C9" is null and "T0"."C9" is null) and ("T1"."C10" = "T0"."C10" or "T1"."C10" is null and "T0"."C10" is null) and "T1"."C11" = "T0"."C11" and ("T1"."C12" = "T0"."C12" or "T1"."C12" is null and "T0"."C12" is null) and ("T1"."C13" = "T0"."C13" or "T1"."C13" is null and "T0"."C13" is null) and "T1"."C14" = "T0"."C14" and "T1"."C15" = "T0"."C15" and ("T1"."C16" = "T0"."C16" or "T1"."C16" is null and "T0"."C16" is null) and ("T1"."C17" = "T0"."C17" or "T1"."C17" is null and "T0"."C17" is null)
+            </code></pre>
+            <p><small class="white-text">Código de la vida real sacado de <a href="http://stackoverflow.com/questions/15820582/getting-ugly-sql-query-to-work-in-c-sharp">StackOverflow</a></small></p>
+          </section>
+
+
+          <section data-background="#5f80ae">
+            <h2 class="white-text">MongoDB es amigable</h2>
+          </section>
+
+
+          <section data-background="#5f80ae">
+            <h2>JSON!</h2>
+            <pre class="stretch"><code data-trim>
+
+{
+    "glossary": {
+        "title": "example glossary",
+    "GlossDiv": {
+            "title": "S",
+      "GlossList": {
+                "GlossEntry": {
+                    "ID": "SGML",
+          "SortAs": "SGML",
+          "GlossTerm": "Standard Generalized Markup Language",
+          "Acronym": "SGML",
+          "Abbrev": "ISO 8879:1986",
+          "GlossDef": {
+                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
+            "GlossSeeAlso": ["GML", "XML"]
+                    },
+          "GlossSee": "markup"
+                }
+            }
+        }
+    }
+}
+            </code></pre>
+          </section>
+
+
+          <section data-background="#5f80ae">
+            <h2 class="white-text">No hay ALTER TABLE</h2>
+            <h3 class="sans-serif-heading white-text">(  Yey! *<:D )</h3>
+            <div class="row clearfix" style="margin-top:1em">
+              <div class="col-50">
+                <h3 class="light-gray-text fragment roll-in">Agile</h3>
+                <h3 class="light-gray-text fragment roll-in">TDD</h3>
+              </div>
+              <div class="col-50">
+                <h3 class="light-gray-text fragment roll-in">SCRUM</h3>
+                <h3 class="light-gray-text fragment roll-in">XP</h3>
+              </div>
+            </div>
+          </section>
+
+          <section data-background="#f06e3b">
+            <h2 class="white-text">MongoDB es popular</h2>
+          </section>
+
+          <section>
+            <img data-src="img/rank-table.png" class="stretch">
+            <p style="text-align:right;"><small>Fuente: <a href="http://db-engines.com/en/ranking"> DB-Engines</a></small></p>
+          </section>
+
+          <section data-background="#c54a94">
+            <h2 class="white-text">¿Quiénes lo usan?</h2>
+          </section>
+
+          <section>
+            <img class="fragment roll-in" data-src="img/mtv.png">
+            <img class="fragment roll-in" data-src="img/bi.png">
+          </section>
+
+          <section>
+            <img class="fragment roll-in" data-src="img/new-york-times.gif">
+            <img class="fragment roll-in" data-src="img/github.png">
+          </section>
+
+          <section>
+            <img class="fragment roll-in" data-src="img/linkedin.png">
+            <img class="fragment roll-in" data-src="img/ebay.jpg">
+          </section>
+
+          <section>
+            <img class="fragment roll-in" data-src="img/expedia.jpg">
+            <img class="fragment roll-in" data-src="img/the-guardian.jpg">
+          </section>
+
+          <section data-background="#c1c345">
+            <h2>Hands on!</h2>
+          </section>
+
+          <section>
+            <h2>¿Preguntas?</h2>
+            <h2 class="sans-serif-heading" style="margin-top:1em">o_o</h2>
+          </section>
+
+          <section>
+            <h2>¡Gracias!</h2>
+            <h2 class="sans-serif-heading" style="margin-top:1em">:D</h2>
+          </section>
+
+          <section data-background="#e9c63d">
+            <h2>encuentra esta presentación en:</h2>
+            <h4 class="sans-serif-heading" style="margin-top:1em"><a href="http://stefanmaric.com/slides/mongodb2014">stefanmaric.com/slides/mongodb2014</a></h4>
+          </section>
+
+        </section>
+      </div>
+
+    </div>
+
+    <script>
+Reveal.initialize({
+
+  // Display controls in the bottom right corner
+  controls: false,
+
+  // Display a presentation progress bar
+  progress: true,
+
+  // Display the page number of the current slide
+  slideNumber: false,
+
+  // Push each slide change to the browser history
+  history: true,
+
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+
+  // Enable the slide overview mode
+  overview: true,
+
+  // Vertical centering of slides
+  center: true,
+
+  // Enables touch navigation on devices with touch input
+  touch: true,
+
+  // Loop the presentation
+  loop: false,
+
+  // Change the presentation direction to be RTL
+  rtl: false,
+
+  // Randomizes the order of slides each time the presentation loads
+  shuffle: false,
+
+  // Turns fragments on and off globally
+  fragments: true,
+
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+
+  // Flags if we should show a help overlay when the questionmark
+  // key is pressed
+  help: true,
+
+  // Flags if speaker notes should be visible to all viewers
+  showNotes: false,
+
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+
+  // Use this method for navigation when auto-sliding
+  autoSlideMethod: Reveal.navigateNext,
+
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+
+  // Transition style
+  transition: 'linear', // none/fade/slide/convex/concave/zoom
+
+  // Transition speed
+  transitionSpeed: 'slow', // default/fast/slow
+
+  // Transition style for full page slide backgrounds
+  backgroundTransition: 'slide', // none/fade/slide/convex/concave/zoom
+
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+
+  // Parallax background image
+  parallaxBackgroundImage: '', // e.g. "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'"
+
+  // Parallax background size
+  parallaxBackgroundSize: '', // CSS syntax, e.g. "2100px 900px"
+
+  // Number of pixels to move the parallax background per slide
+  // - Calculated automatically unless specified
+  // - Set to 0 to disable movement along an axis
+  parallaxBackgroundHorizontal: null,
+  parallaxBackgroundVertical: null,
+  // Dependencies
+
+  dependencies: [
+    // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+    {
+      src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/classList.js',
+      condition: function() { return !document.body.classList } },
+    // Syntax highlight for <code> elements
+    {
+      src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js',
+      async: true,
+      callback: function() { hljs.initHighlightingOnLoad() } }
+  ]
+})
+    </script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-53649019-1', 'auto');
+      ga('require', 'displayfeatures');
+      ga('require', 'linkid', 'linkid.js');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+</html>
